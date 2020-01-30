@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fake Vue</title>
+    <link rel="icon" href="./logo.svg" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="/dist/vue.js"></script>
+    <script>
+      console.log(Vue);
+      // Vue.component("global-component", {
+      //   template: "<li>全局组件</li>",
+      // });
+      let vm = new Vue({
+        el: "#app",
+        // components: {
+        //   "partial-component": {
+        //     template: "<li>局部组件</li>",
+        //   },
+        // },
+        data() {
+          return {
+            aa: 1,
+            bb: 2,
+            cc: 3,
+            object: { type: "object", value: { name: "object" } },
+            array: { type: "array", value: [1, 2, [3, 4, [5, 6]]] },
+          };
+        },
+        // render(h) {
+        //   return h("div", { id: "a" }, "hello");
+        // },
+        template: [
+          '<div id="a">',
+          "<ul>",
+          "<li>字符串：纯字符串</li>",
+          "<li>computedName：{{computedName}}</li>",
+          "<li>cc：{{cc}}</li>",
+          "<li>名称：{{object.value.name}}</li>",
+          "<li>长度：{{array.value.length}}</li>",
+          // "<global-component></global-component>",
+          // "<partial-component></partial-component>",
+          "</ul>",
+          "</div>",
+        ].join(""),
+        computed: {
+          computedName() {
+            return this.aa + this.bb;
+          },
+        },
+        watch: {
+          aa(newVal, oldVal) {
+            console.log(newVal, oldVal);
+          },
+        },
+        beforeCreate() {
+          console.log("beforeCreate");
+        },
+        created() {
+          console.log("created");
+        },
+        beforeMount() {
+          console.log("beforeMount");
+        },
+        mounted() {
+          console.log("mounted");
+        },
+        beforeUpdate() {
+          console.log("beforeUpdate");
+        },
+        updated() {
+          console.log("updated");
+        },
+      });
+
+      // 每次改变数据，渲染 watcher 都会执行一次，影响性能
+      setTimeout(() => {
+        vm.aa = 2;
+        vm.cc = 4;
+        vm.array.value.push(3);
+      }, 2000);
+      console.log(vm);
+    </script>
+  </body>
+</html>
